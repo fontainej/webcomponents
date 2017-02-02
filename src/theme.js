@@ -9,17 +9,36 @@
 
 export let theme = {};
 
-theme.loginForm = (model, intents) => {
-
-    const rememberme = model.rememberme || false;
+theme.signInWithEmailAndPassword = (model, intents) => {
 
     return `
         <form id="login">
             <label>Username <input type="text" name="username" placeholder="username" autocomplete="username" autocapitalize="none" required></label>
             <label>Password <input type="text" name="password" placeholder="password" autocomplete="password" autocapitalize="none" required></label>
-            <label>Remember me <input type="checkbox" name="rememberme" ${rememberme ? 'checked' : ''}></label>
-            <button onclick="return ${intents['login']}({ username: document.getElementById('login').elements['username'].value, password: document.getElementById('login').elements['password'].value, rememberme: document.getElementById('login').elements['rememberme'].value})">Log in</button>
+            <button onclick="return ${intents['signInWithEmailAndPassword']}({ username: document.getElementById('login').elements['username'].value, password: document.getElementById('login').elements['password'].value })">Log in</button>
         </form>`;
 };
 
-theme.debug = model => `<p>${model.login ? JSON.stringify(model.login) : ''}</p>`;
+theme.signInWithPopup = intents => {
+
+    return `
+        <button onclick="return ${intents['signInWithPopup']}('GoogleAuthProvider')">Sign in with Google</button>
+        <button onclick="return ${intents['signInWithPopup']}('GithubAuthProvider')">Sign in with Github</button>
+        <button onclick="return ${intents['signInWithPopup']}('TwitterAuthProvider')">Sign in with Twitter</button>`;
+};
+
+theme.logout = (model, intents) => {
+
+    return `
+        <section>
+            <img src="${model.photoURL}" width="50px" height="50px"> Hi, ${model.displayName}!
+            <button onclick="return ${intents['logout']}()">Log out</button>
+        </section>`;
+};
+
+theme.error = model => {
+
+    return `
+        <pre>Code: ${model.code}</pre>
+        <pre>Message: ${model.message}</pre>`;
+};

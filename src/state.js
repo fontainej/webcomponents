@@ -1,6 +1,6 @@
 import { actions } from './actions.js';
 
-export var state =  {};
+export let state =  {};
 
 state.init = view => {
 
@@ -9,27 +9,31 @@ state.init = view => {
 
 state.representation = model => {
 
-    var representation = 'oops... something went wrong, the system is in an invalid state';
+    let representation = 'oops... something went wrong, the system is in an invalid state';
 
-    // This is where the State decides which component of the View should be displayed
-    // here the we designed the application with a single (control) State (~page)
-    // In a real-world application there would be many control states and which
-    // would trigger the display of different components
-    if (state.ready(model)) {
+    if (state.error(model)) {
+
+        representation = state.view.error(model);
+    } else if (state.ready()) {
 
         representation = state.view.ready(model, actions.intents);
+    } else {
+
+        representation = state.view.loggedIn(model, actions.intents);
     }
 
     state.view.display(representation);
 };
 
-state.ready = model => true;
+state.ready = () => !firebase.auth().currentUser;
 
-state.nextAction = model => {};
+state.error = model => model.code && model.message;
+
+state.nextAction = () => {};
 
 state.render = model => {
 
     state.representation(model);
 
-    state.nextAction(model);
+    state.nextAction();
 };

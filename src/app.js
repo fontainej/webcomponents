@@ -1,7 +1,10 @@
+import { config } from './config.js';
 import { state } from './state.js';
 import { model } from './model.js';
 import { actions } from './actions.js';
 import { view } from './view.js';
+
+config.init();
 
 state.init(view);
 

@@ -2,6 +2,11 @@ export let model = {};
 
 model.init = (state) => {
 
+    if (firebase.auth().currentUser) {
+
+        model.data = firebase.auth().currentUser.providerData[0];
+    }
+
     model.state = state;
 };
 
@@ -12,13 +17,14 @@ model.presentFilters = (data) => {
 
 model.CRUD = (data) => {
 
-    if (data.username && data.password) {
+    if (data.user) {
 
-        model.login = {
-            username: data.username
-            , password: data.password
-            , rememberme: data.rememberme
-        };
+        return data.user.providerData[0];
+    }
+
+    if (data.code && data.message) {
+
+        return { code: data.code, message: data.message };
     }
 };
 
@@ -33,9 +39,9 @@ model.present = (data) => {
 
     model.presentFilters(data);
 
-    model.CRUD(data);
+    model.data = model.CRUD(data);
 
     model.postProcessing();
 
-    model.state.render(model);
+    model.state.render(model.data);
 };

@@ -1,19 +1,35 @@
 import { theme } from './theme.js';
 
-export var view = {};
+export let view = {};
 
 view.init = (model, intents) => {
 
     return view.ready(model, intents);
 };
 
+view.loggedIn = (model, intents) => {
+
+    return ({
+
+        logout: theme.logout(model, intents)
+    });
+};
+
+view.error = model => {
+
+    return ({
+
+        error: theme.error(model)
+    });
+};
+
 view.ready = (model, intents) => {
 
     return ({
 
-        login: theme.loginForm(model, intents)
+        signInWithEmailAndPassword: theme.signInWithEmailAndPassword(model, intents)
 
-        , debug: theme.debug(model)
+        , signInWithPopup: theme.signInWithPopup(intents)
     });
 };
 

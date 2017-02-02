@@ -7,14 +7,28 @@ actions.init = (present) => {
 
 actions.intents = {
 
-    login: 'actions.login'
+    signInWithEmailAndPassword: 'actions.signInWithEmailAndPassword'
+    , signInWithPopup: 'actions.signInWithPopup'
+    , logout: 'actions.logout'
 };
 
-actions.login = (data, present) => {
+actions.signInWithPopup = provider => {
 
-    const _present = present || actions.present;
+    firebase.auth()
+        .signInWithPopup(new firebase.auth[provider]())
+        .then(actions.present);
+};
 
-    _present({ username: data.username, password: data.password, rememberme: data.rememberme });
+actions.signInWithEmailAndPassword = data => {
 
-    return false;
+    firebase.auth()
+        .signInWithEmailAndPassword(data.username, data.password)
+        .catch(actions.present);
+};
+
+actions.logout = () => {
+
+    firebase.auth()
+        .signOut()
+        .then(actions.present);
 };
